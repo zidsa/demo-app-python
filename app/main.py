@@ -1,11 +1,10 @@
 """Zid SDK Demo API."""
 
-from typing import Optional
-
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
-from pydantic import BaseModel
-from zid import ZidClient
+
+# Simplified imports - all primary models at root level
+from zid import ZidClient, Order, Customer, Store, Webhook, WebhookCreate
 
 from app.auth import router as auth_router
 from app.config import settings, get_tokens
@@ -17,110 +16,62 @@ app.include_router(auth_router)
 register_exception_handlers(app)
 
 
+def get_client() -> ZidClient:
+    """Create authenticated ZidClient."""
+    tokens = get_tokens()
+    if not tokens:
+        raise HTTPException(401, "Not authenticated")
+    return ZidClient(
+        base_url=settings.zid_api_base_url,
+        authorization=tokens["authorization_token"],
+        store_token=tokens["access_token"],
+    )
+
+
 # =============================================================================
 # SDK Examples
 # =============================================================================
 
 @app.get("/api/store")
 def get_store():
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+    client = get_client()
     return client.stores.get_profile()
 
 
 @app.get("/api/customers")
 def get_customers():
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+    client = get_client()
     return {"data": list(client.customers.list())}
 
 
 @app.get("/api/orders")
 def get_orders():
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+    client = get_client()
     return {"data": list(client.orders.list())}
 
 
 @app.get("/api/orders/{order_id}")
 def get_order(order_id: int):
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+    client = get_client()
     return client.orders.get(order_id)
-
-
-class WebhookRequest(BaseModel):
-    event: str
-    target_url: Optional[str] = None
 
 
 @app.get("/api/webhooks")
 def list_webhooks():
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+    client = get_client()
     return {"data": list(client.webhooks.list())}
 
 
 @app.post("/api/webhooks")
-def create_webhook(body: WebhookRequest):
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+def create_webhook(body: WebhookCreate):
+    """Create webhook using SDK model directly."""
+    client = get_client()
     return client.webhooks.create(event=body.event, target_url=body.target_url)
 
 
 @app.delete("/api/webhooks/{webhook_id}")
 def delete_webhook(webhook_id: int):
-    tokens = get_tokens()
-    if not tokens:
-        raise HTTPException(401, "Not authenticated")
-    
-    client = ZidClient(
-        base_url=settings.zid_api_base_url,
-        authorization_token=tokens["authorization_token"],
-        access_token=tokens["access_token"],
-    )
+    client = get_client()
     client.webhooks.delete(webhook_id)
     return {"status": "deleted"}
 

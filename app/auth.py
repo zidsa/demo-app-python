@@ -54,7 +54,7 @@ async def callback(
         data = resp.json()
     
     save_tokens(
-        authorization_token=data.get("authorization") or data.get("authorization_token", ""),
+        authorization_token=data.get("authorization", ""),
         access_token=data.get("access_token", ""),
     )
     

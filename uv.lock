@@ -770,7 +770,7 @@ wheels = [
 [[package]]
 name = "zid"
 version = "0.1.0"
-source = { git = "https://github.com/zidsa/sdk-python?rev=main#65ebc4eab954927e57dbfbd893939e6c9dd9451c" }
+source = { git = "https://github.com/zidsa/sdk-python?rev=main#49193a71418e258939d46707aecf8f22846e32f0" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },

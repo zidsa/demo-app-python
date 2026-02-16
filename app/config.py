@@ -11,12 +11,12 @@ class Settings(BaseSettings):
     zid_redirect_uri: str = "http://localhost:8000/auth/callback"
     zid_authorize_url: str = "https://oauth.zid.sa/oauth/authorize"
     zid_token_url: str = "https://oauth.zid.sa/oauth/token"
-    zid_api_base_url: str = "https://api.zid.sa/v1"
+    zid_api_base_url: str = "https://api.zid.sa"
 
 
 settings = Settings()
 
-# In-memory token storage (keeps the demo simple)
+# In-memory token storage
 _tokens: dict = {}
 
 

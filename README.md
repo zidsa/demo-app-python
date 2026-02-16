@@ -32,18 +32,13 @@ Plus the exact SDK code that powers it:
 from zid import ZidClient
 
 client = ZidClient(
-    authorization_token="...",
-    access_token="...",
+    authorization="...",
+    store_token="...",
 )
 
-# Get store info
 store = client.stores.get_profile()
-
-# List customers
-customers = client.customers.list(page=1, per_page=20)
-
-# List orders
-orders = client.orders.list(page=1, per_page=5)
+customers = client.customers.list()
+orders = client.orders.list()
 ```
 
 ## OAuth Setup with ngrok
