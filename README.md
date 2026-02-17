@@ -41,9 +41,17 @@ customers = client.customers.list()
 orders = client.orders.list()
 ```
 
-## OAuth Setup with ngrok
+## OAuth Setup (Public URL Required)
 
-Zid OAuth needs a public URL:
+Zid OAuth requires a publicly accessible callback URL — `localhost` won't work.
+
+**Options:**
+- [ngrok](https://ngrok.com) — quick tunnel for local dev
+- [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
+- Deploy to any cloud provider (Vercel, Railway, Render, etc.)
+- Any reverse proxy or tunnel that gives you a public HTTPS URL
+
+**Example with ngrok:**
 
 ```bash
 ngrok http 8000
@@ -51,10 +59,10 @@ ngrok http 8000
 
 Update `.env`:
 ```
-ZID_REDIRECT_URI=https://your-ngrok-url.ngrok.io/auth/callback
+ZID_REDIRECT_URI=https://your-url.ngrok.io/auth/callback
 ```
 
-Add the same URL to your Zid app settings.
+Add the same URL to your Zid app settings in the Partner Dashboard.
 
 ## API Endpoints
 
