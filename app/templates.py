@@ -69,6 +69,11 @@ DASHBOARD = """
         .detail-label { color: #666; }
         .section-title { font-size: 0.8rem; color: #999; text-transform: uppercase; margin-top: 1rem; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; }
         .product-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 0.3rem 0; }
+        .token-box { background: #f5f5f5; border: 1px solid #e5e5e5; border-radius: 6px; padding: 0.75rem; margin-top: 0.5rem; font-family: 'Courier New', monospace; font-size: 0.8rem; word-break: break-all; position: relative; }
+        .token-label { font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; font-weight: 600; }
+        .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: white; border: 1px solid #ddd; border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.7rem; cursor: pointer; color: #666; }
+        .copy-btn:hover { background: #f9f9f9; border-color: #999; }
+        .copy-btn.copied { background: #dcfce7; color: #166534; border-color: #86efac; }
         @media (max-width: 768px) { .card.wide { grid-column: span 1; } .store-details { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -83,6 +88,7 @@ DASHBOARD = """
             <div class="card" id="customers-card"><h2>Customers</h2><div class="loading">Loading...</div></div>
             <div class="card" id="orders-card"><h2>Recent Orders</h2><div class="loading">Loading...</div></div>
             <div class="card" id="webhooks-card"><h2>Webhooks</h2><div class="loading">Loading...</div></div>
+            <div class="card wide" id="tokens-card"><h2>API Tokens</h2><div class="loading">Loading...</div></div>
         </div>
     </div>
     
@@ -98,6 +104,26 @@ DASHBOARD = """
     
     <script>
         async function load() {
+            // Tokens
+            try {
+                const tokens = await fetch('/api/tokens').then(r => r.json());
+                document.getElementById('tokens-card').innerHTML = `
+                    <h2>API Tokens</h2>
+                    <div class="sub" style="margin-bottom: 0.75rem">Use these tokens for testing API calls</div>
+                    <div style="position: relative;">
+                        <div class="token-label">Authorization Token (Bearer)</div>
+                        <div class="token-box" id="auth-token">${tokens.authorization_token || 'Not available'}
+                            <button class="copy-btn" onclick="copyToken('auth-token', this)">Copy</button>
+                        </div>
+                    </div>
+                    <div style="position: relative; margin-top: 1rem;">
+                        <div class="token-label">Access Token (X-Manager-Token)</div>
+                        <div class="token-box" id="access-token">${tokens.access_token || 'Not available'}
+                            <button class="copy-btn" onclick="copyToken('access-token', this)">Copy</button>
+                        </div>
+                    </div>`;
+            } catch { document.getElementById('tokens-card').innerHTML = `<h2>API Tokens</h2><div class="error">Failed to load tokens</div>`; }
+            
             // Store info
             try {
                 const store = await fetch('/api/store').then(r => r.json());
@@ -178,7 +204,20 @@ DASHBOARD = """
         }
         
         function closeModal() { document.getElementById('detail-modal').classList.remove('active'); }
-        document.getElementById('detail-modal').onclick = (e) => { if (e.target.id === 'detail-modal') closeModal(); };
+        document.getElementById('detail-modal').onclick = (e) => { if (e.target.id === 'detail-modal') closeModal(); }
+        
+        function copyToken(elementId, btn) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent.replace('Copy', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        };
         
         function showCustomer(c) {
             showModal('Customer Details', `

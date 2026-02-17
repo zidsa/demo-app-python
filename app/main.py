@@ -76,6 +76,15 @@ def delete_webhook(webhook_id: int):
     return {"status": "deleted"}
 
 
+@app.get("/api/tokens")
+def get_api_tokens():
+    """Return current tokens for testing purposes."""
+    tokens = get_tokens()
+    if not tokens:
+        raise HTTPException(401, "Not authenticated")
+    return tokens
+
+
 # =============================================================================
 # Pages
 # =============================================================================
