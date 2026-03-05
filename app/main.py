@@ -1,9 +1,9 @@
 """Zid SDK Demo API."""
 
 from fastapi import FastAPI, HTTPException
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, RedirectResponse
 
-# Simplified imports - all primary models at root level
 from zid import ZidClient, Order, Customer, Store, Webhook, WebhookCreate
 
 from app.auth import router as auth_router
@@ -25,6 +25,7 @@ def get_client() -> ZidClient:
         base_url=settings.zid_api_base_url,
         authorization=tokens["authorization_token"],
         store_token=tokens["access_token"],
+        store_id=settings.zid_store_id,
     )
 
 
@@ -35,31 +36,37 @@ def get_client() -> ZidClient:
 @app.get("/api/store")
 def get_store():
     client = get_client()
-    return client.stores.get_profile()
+    return jsonable_encoder(client.stores.get_profile())
+
+
+@app.get("/api/products")
+def get_products():
+    client = get_client()
+    return {"data": jsonable_encoder(client.products.list().take(10))}
 
 
 @app.get("/api/customers")
 def get_customers():
     client = get_client()
-    return {"data": list(client.customers.list())}
+    return {"data": jsonable_encoder(list(client.customers.list()))}
 
 
 @app.get("/api/orders")
 def get_orders():
     client = get_client()
-    return {"data": list(client.orders.list())}
+    return {"data": jsonable_encoder(list(client.orders.list()))}
 
 
 @app.get("/api/orders/{order_id}")
 def get_order(order_id: int):
     client = get_client()
-    return client.orders.get(order_id)
+    return jsonable_encoder(client.orders.get(order_id))
 
 
 @app.get("/api/webhooks")
 def list_webhooks():
     client = get_client()
-    return {"data": list(client.webhooks.list())}
+    return {"data": jsonable_encoder(list(client.webhooks.list()))}
 
 
 @app.post("/api/webhooks")

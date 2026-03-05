@@ -7,7 +7,10 @@ A minimal FastAPI starter showing how to integrate the [Zid Python SDK](https://
 ## Quick Start
 
 ```bash
-# Install
+# Install the Zid SDK
+pip install zid-client
+
+# Install demo dependencies
 uv sync
 
 # Configure (add your Zid OAuth credentials)

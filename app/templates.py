@@ -85,6 +85,7 @@ DASHBOARD = """
         
         <div class="grid">
             <div class="card wide" id="store-card"><h2>Store Info</h2><div class="loading">Loading...</div></div>
+            <div class="card" id="products-card"><h2>Products</h2><div class="loading">Loading...</div></div>
             <div class="card" id="customers-card"><h2>Customers</h2><div class="loading">Loading...</div></div>
             <div class="card" id="orders-card"><h2>Recent Orders</h2><div class="loading">Loading...</div></div>
             <div class="card" id="webhooks-card"><h2>Webhooks</h2><div class="loading">Loading...</div></div>
@@ -130,18 +131,35 @@ DASHBOARD = """
                 const s = store.user?.store || store;
                 document.getElementById('store-card').innerHTML = `
                     <h2>Store Info</h2>
-                    <div class="value">${s.title || s.name || '-'}</div>
-                    <div class="sub" style="margin-bottom: 1rem">${s.username || s.email || ''}</div>
+                    <div class="value">${s.title || '-'}</div>
+                    <div class="sub" style="margin-bottom: 1rem">${s.username || ''}</div>
                     <div class="store-details">
                         <div class="store-row"><span class="store-label">ID</span><span>${s.id || '-'}</span></div>
                         <div class="store-row"><span class="store-label">Email</span><span>${s.email || '-'}</span></div>
-                        <div class="store-row"><span class="store-label">Phone</span><span>${s.mobile || s.phone || '-'}</span></div>
-                        <div class="store-row"><span class="store-label">Country</span><span>${s.country?.name || s.country_code || '-'}</span></div>
-                        <div class="store-row"><span class="store-label">Currency</span><span>${s.currency || '-'}</span></div>
-                        <div class="store-row"><span class="store-label">Status</span><span class="badge ${s.is_active ? 'success' : ''}">${s.is_active ? 'Active' : 'Inactive'}</span></div>
+                        <div class="store-row"><span class="store-label">Phone</span><span>${s.phone || '-'}</span></div>
+                        <div class="store-row"><span class="store-label">Country</span><span>${s.currency?.country?.name || '-'}</span></div>
+                        <div class="store-row"><span class="store-label">Currency</span><span>${s.currency?.code || '-'}</span></div>
+                        <div class="store-row"><span class="store-label">Plan</span><span>${s.subscription?.package_name?.en || s.subscription?.package_code || '-'}</span></div>
                     </div>`;
             } catch { document.getElementById('store-card').innerHTML = `<h2>Store Info</h2><div class="error">Failed to load</div>`; }
             
+            // Products
+            try {
+                const resp = await fetch('/api/products').then(r => r.json());
+                const products = resp.data || [];
+                const items = products.slice(0, 6).map(p => `
+                    <li class="item">
+                        <div class="item-info">
+                            <span class="item-name">${p.name?.en || p.name?.ar || '-'}</span>
+                            <span class="item-sub">SKU: ${p.sku || '-'}</span>
+                        </div>
+                        <span class="badge">${p.price != null ? p.price + ' ' + (p.currency || '') : '-'}</span>
+                    </li>`).join('') || '<li class="item"><span class="item-sub">No products</span></li>';
+                document.getElementById('products-card').innerHTML = `
+                    <h2>Products <span style="color:#666;font-weight:normal">(${products.length})</span></h2>
+                    <ul class="item-list">${items}</ul>`;
+            } catch { document.getElementById('products-card').innerHTML = `<h2>Products</h2><div class="error">Failed to load</div>`; }
+
             // Customers
             try {
                 const resp = await fetch('/api/customers').then(r => r.json());

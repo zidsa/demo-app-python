@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     zid_authorize_url: str = "https://oauth.zid.sa/oauth/authorize"
     zid_token_url: str = "https://oauth.zid.sa/oauth/token"
     zid_api_base_url: str = "https://api.zid.sa"
+    zid_store_id: int | None = None
 
 
 settings = Settings()
