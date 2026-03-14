@@ -20,7 +20,7 @@ cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
-Open http://localhost:8000 and click "Connect Your Zid Store".
+Open http://localhost:8000 and click "Install App".
 
 ## What You'll See
 
@@ -65,7 +65,9 @@ Update `.env`:
 ZID_REDIRECT_URI=https://your-url.ngrok.io/auth/callback
 ```
 
-Add the same URL to your Zid app settings in the Partner Dashboard.
+Then in the Zid Partner Dashboard under Application Details, set:
+- **Redirection URL** → `https://your-url.ngrok.io/auth/redirect`
+- **Callback URL** → `https://your-url.ngrok.io/auth/callback`
 
 ## API Endpoints
 

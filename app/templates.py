@@ -19,7 +19,7 @@ LANDING = """
     <div class="card">
         <h1>Zid SDK Demo</h1>
         <p>Connect a Zid store to see the SDK in action.</p>
-        <a href="/auth/login" class="btn">Connect Store</a>
+        <a href="/auth/redirect" class="btn">Install App</a>
     </div>
 </body>
 </html>
