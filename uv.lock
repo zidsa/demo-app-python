@@ -659,6 +659,19 @@ wheels = [
 ]
 
 [[package]]
+name = "zid-client"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/09/d7/2ff8bfcd0eaaf6c807d27fc3d389ab08d21fb6b42ed97c48efe67b1f78b1/zid_client-0.1.0.tar.gz", hash = "sha256:30ba8247c0561c98920889d2023fdedc89f2ae70ce8ed86b88fefbbadec6175f", size = 121807, upload-time = "2026-03-05T07:51:06.886Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1c/68/2602741fba5850147bccf599823fcee5eaad8cb4b842784328431f2afe34/zid_client-0.1.0-py3-none-any.whl", hash = "sha256:85dfa714044b972d1c99affc2ff6ba43691132068d392b1192c063669097c3df", size = 108404, upload-time = "2026-03-05T07:51:04.71Z" },
+]
+
+[[package]]
 name = "zid-fastapi-demo"
 version = "0.1.0"
 source = { editable = "." }
@@ -667,6 +680,7 @@ dependencies = [
     { name = "httpx" },
     { name = "pydantic-settings" },
     { name = "uvicorn", extra = ["standard"] },
+    { name = "zid-client" },
 ]
 
 [package.optional-dependencies]
@@ -685,5 +699,6 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.4.0" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.23.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.27.0" },
+    { name = "zid-client", specifier = ">=0.1.0" },
 ]
 provides-extras = ["dev"]

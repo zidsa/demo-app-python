@@ -73,7 +73,11 @@ def list_webhooks():
 def create_webhook(body: WebhookCreate):
     """Create webhook using SDK model directly."""
     client = get_client()
-    return client.webhooks.create(event=body.event, target_url=body.target_url)
+    return client.webhooks.create(
+        event=body.event,
+        target_url=body.target_url,
+        original_id=body.original_id,
+    )
 
 
 @app.delete("/api/webhooks/{webhook_id}")
