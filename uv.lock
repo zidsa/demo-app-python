@@ -660,15 +660,15 @@ wheels = [
 
 [[package]]
 name = "zid-client"
-version = "0.1.0"
+version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/09/d7/2ff8bfcd0eaaf6c807d27fc3d389ab08d21fb6b42ed97c48efe67b1f78b1/zid_client-0.1.0.tar.gz", hash = "sha256:30ba8247c0561c98920889d2023fdedc89f2ae70ce8ed86b88fefbbadec6175f", size = 121807, upload-time = "2026-03-05T07:51:06.886Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/d4/69aa8642d105991cccd3031201a75cc5c68a993a7d599ee8a943017b5096/zid_client-0.1.2.tar.gz", hash = "sha256:26d1606e00bfe98adf2dd0e99eda04081548a9a4cce13a30044cc5f4964f4f54", size = 154276, upload-time = "2026-05-11T10:31:00.183Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1c/68/2602741fba5850147bccf599823fcee5eaad8cb4b842784328431f2afe34/zid_client-0.1.0-py3-none-any.whl", hash = "sha256:85dfa714044b972d1c99affc2ff6ba43691132068d392b1192c063669097c3df", size = 108404, upload-time = "2026-03-05T07:51:04.71Z" },
+    { url = "https://files.pythonhosted.org/packages/02/27/39011e2e993f5ff252292ac3908b1a4042c1ce761c6d0ec23a3adabb98dc/zid_client-0.1.2-py3-none-any.whl", hash = "sha256:c5064794f3af5f4299025a5c52c540842b57c63feba2838fa0aeaf02c0456de5", size = 108521, upload-time = "2026-05-11T10:30:57.785Z" },
 ]
 
 [[package]]
